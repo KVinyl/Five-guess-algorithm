@@ -55,14 +55,9 @@ def reduce_possible_codes(possible_codes, guess, fb):
     """Return a set with all elements from possible_codes that would receive
     the same feedback as the actual feedback from guess, fb,
     if guess was the secret code."""
-    new_possible_codes = set()
     test = Mastermind(guess)
 
-    for code in possible_codes:
-        if test.feedback(code) == fb:
-            new_possible_codes.add(code)
-
-    return new_possible_codes
+    return {code for code in possible_codes if test.feedback(code) == fb}
 
 
 def next_guess(possible_codes):
