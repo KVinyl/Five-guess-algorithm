@@ -13,6 +13,12 @@ class Mastermind():
         self.win = False
 
     def feedback(self, guess):
+        """
+        Return a namedtuple Feedback(blacks, whites) where
+        blacks is the number of pegs from the guess that
+        are correct in both color and position and
+        whites is the number of pegs of the right color but wrong position.
+        """
         blacks = sum(g == c for g, c in zip(guess, self._code))
         whites = sum((Counter(guess) & Counter(
             self._code)).values()) - blacks
@@ -23,11 +29,12 @@ class Mastermind():
         return Feedback(blacks, whites)
 
     def victory(self):
+        """Return whether the secret code has been correctly guessed."""
         return self.win
 
 
 def print_turn(guess, fb):
-    """Print the guess and feedback of the turn"""
+    """Print the guess and feedback of the turn."""
     blacks, whites = fb
     print("Guess: ", guess)
     print("Blacks: ", blacks)
