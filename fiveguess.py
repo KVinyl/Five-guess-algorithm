@@ -72,11 +72,11 @@ def print_turn(guess, fb, turn):
     """Print the guess and feedback of the turn."""
     blacks, whites = fb
 
+    print()
     print("Turn", turn)
     print("Guess:", guess)
     print("Blacks:", blacks)
     print("Whites:", whites)
-    print()
 
 
 def reduce_possible_codes(possible_codes, guess, fb):
@@ -135,6 +135,7 @@ def game():
         # 4. If the response is four colored pegs,
         # the game is won, the algorithm terminates.
         if mastermind.victory():
+            print()
             break
 
         # 5. Otherwise, remove from S any code that would not give the same
@@ -152,12 +153,14 @@ def main():
     while True:
         game()
 
-        again = input("Play again? ")
+        again = ""
+        while again not in ['y', 'n']:
+            answer = input("Play again? (y/n) ")
+            if answer:
+                again = answer[0].lower()
 
-        if again[0].lower() == "n":
+        if again == 'n':
             break
-
-        print()
 
 
 if __name__ == "__main__":

@@ -25,11 +25,11 @@ def feedback(code, guess):
 
 def turn(guess, turn_num):
     """Input feedback of the turn."""
+    print()
     print("Turn", turn_num)
     print("Guess:", guess)
     blacks = int(input("Blacks: "))
     whites = int(input("Whites: "))
-    print()
 
     return Feedback(blacks, whites)
 
@@ -90,6 +90,7 @@ def game():
         # 4. If the response is four colored pegs,
         # the game is won, the algorithm terminates.
         if fb.blacks == 4:
+            print()
             break
 
         # 5. Otherwise, remove from S any code that would not give the same
@@ -107,12 +108,14 @@ def main():
     while True:
         game()
 
-        again = input("Play again? ")
+        again = ""
+        while again not in ['y', 'n']:
+            answer = input("Play again? (y/n) ")
+            if answer:
+                again = answer[0].lower()
 
-        if again[0].lower() == "n":
+        if again == 'n':
             break
-
-        print()
 
 
 if __name__ == "__main__":
