@@ -2,6 +2,9 @@ from collections import Counter, namedtuple
 from itertools import product
 from random import randint
 
+
+init_possible_codes = set(product([1, 2, 3, 4, 5, 6], repeat=4))
+
 Feedback = namedtuple('Feedback', ['blacks', 'whites'])
 
 
@@ -68,8 +71,31 @@ def reduce_possible_codes(possible_codes, guess, fb):
     return {code for code in possible_codes if test.feedback(code) == fb}
 
 
-def next_guess(possible_codes):
-    raise NotImplementedError
+def next_guess(possible_codes, past_guesses):
+    """
+    Return the next guess.
+
+    A score is calculated for each possible guess
+    (any unguessed code in the original 1296 set).
+    The score is the minimum number of possibilites it might
+    eliminate from possible_guesses.
+
+    The minimum eliminated is the count of elements in possible_codes
+    minus the highest hit count (the count of the most frequent black/white peg
+    feedback when passed through possible_codes)
+
+    The next guess is the guess with the highest score and is in possible_set
+    whenever possible.
+    """
+    def score(guess):
+        fbs = [Mastermind(code).feedback(guess) for code in possible_codes]
+        return len(possible_codes) - max(Counter(fbs).values())
+
+    ScoreData = namedtuple('ScoreData', ['score', 'is_possible_code', 'guess'])
+    scores = [ScoreData(score(guess), guess in possible_codes, guess)
+              for guess in (init_possible_codes - past_guesses)]
+
+    return max(scores).guess
 
 
 def main():
@@ -81,7 +107,7 @@ def main():
 
     # 1. Create the set S of 1296 possible codes
     # (1111, 1112 ... 6665, 6666)
-    possible_codes = set(product([1, 2, 3, 4, 5, 6], repeat=4))
+    possible_codes = init_possible_codes.copy()
 
     # 2. Start with initial guess 1122
     guess = (1, 1, 2, 2)
@@ -101,7 +127,7 @@ def main():
         possible_codes = reduce_possible_codes(possible_codes, guess, fb)
 
         # 6. Apply minimax technique to find a next guess.
-        guess = next_guess(possible_codes)
+        guess = next_guess(possible_codes, mastermind.past_guesses())
 
         # 7. Repeat from step 3
 
