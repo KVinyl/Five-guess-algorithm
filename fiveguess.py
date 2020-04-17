@@ -9,6 +9,7 @@ class Mastermind():
     def __init__(self, code=None):
         self.pegs = 4
         self.colors = 6
+        self.guesses = set()
         self.win = False
 
         if code is None:
@@ -23,11 +24,14 @@ class Mastermind():
 
     def feedback(self, guess):
         """
-        Return a namedtuple Feedback(blacks, whites) where
+        Add guess to set of past guesses and
+        return a namedtuple Feedback(blacks, whites) where
         blacks is the number of pegs from the guess that
         are correct in both color and position and
         whites is the number of pegs of the right color but wrong position.
         """
+        self.guesses.add(guess)
+
         blacks = sum(g == c for g, c in zip(guess, self._code))
         whites = sum((Counter(guess) & Counter(
             self._code)).values()) - blacks
@@ -36,6 +40,10 @@ class Mastermind():
             self.win = True
 
         return Feedback(blacks, whites)
+
+    def past_guesses(self):
+        """Return set of past guesses made."""
+        return self.guesses
 
     def victory(self):
         """Return whether the secret code has been correctly guessed."""
