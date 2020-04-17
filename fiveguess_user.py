@@ -23,9 +23,10 @@ def feedback(code, guess):
     return Feedback(blacks, whites)
 
 
-def turn(guess):
+def turn(guess, turn_num):
     """Input feedback of the turn."""
-    print("Guess: ", guess)
+    print("Turn", turn_num)
+    print("Guess:", guess)
     blacks = int(input("Blacks: "))
     whites = int(input("Whites: "))
     print()
@@ -78,12 +79,13 @@ def game():
     guesses = set()
 
     # 2. Start with initial guess 1122
+    turn_num = 1
     guess = (1, 1, 2, 2)
 
     while True:
         # 3. Play the guess to get a response of coloured and white pegs.
         guesses.add(guess)
-        fb = turn(guess)
+        fb = turn(guess, turn_num)
 
         # 4. If the response is four colored pegs,
         # the game is won, the algorithm terminates.
@@ -98,6 +100,7 @@ def game():
         guess = next_guess(possible_codes, guesses)
 
         # 7. Repeat from step 3
+        turn_num += 1
 
 
 def main():
@@ -108,6 +111,8 @@ def main():
 
         if again[0].lower() == "n":
             break
+
+        print()
 
 
 if __name__ == "__main__":

@@ -68,12 +68,14 @@ def feedback(code, guess):
     return Feedback(blacks, whites)
 
 
-def print_turn(guess, fb):
+def print_turn(guess, fb, turn):
     """Print the guess and feedback of the turn."""
     blacks, whites = fb
-    print("Guess: ", guess)
-    print("Blacks: ", blacks)
-    print("Whites: ", whites)
+
+    print("Turn", turn)
+    print("Guess:", guess)
+    print("Blacks:", blacks)
+    print("Whites:", whites)
     print()
 
 
@@ -122,12 +124,13 @@ def game():
     possible_codes = init_possible_codes.copy()
 
     # 2. Start with initial guess 1122
+    turn = 1
     guess = (1, 1, 2, 2)
 
     while True:
         # 3. Play the guess to get a response of coloured and white pegs.
         fb = mastermind.feedback(guess)
-        print_turn(guess, fb)
+        print_turn(guess, fb, turn)
 
         # 4. If the response is four colored pegs,
         # the game is won, the algorithm terminates.
@@ -142,6 +145,7 @@ def game():
         guess = next_guess(possible_codes, mastermind.past_guesses())
 
         # 7. Repeat from step 3
+        turn += 1
 
 
 def main():
@@ -152,6 +156,8 @@ def main():
 
         if again[0].lower() == "n":
             break
+
+        print()
 
 
 if __name__ == "__main__":
