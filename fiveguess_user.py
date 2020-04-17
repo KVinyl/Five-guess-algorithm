@@ -67,7 +67,7 @@ def next_guess(possible_codes, past_guesses):
     return max(scores, key=attrgetter('score', 'is_possible_code')).guess
 
 
-def main():
+def game():
     """
     Five-guess algorithm steps are directly from the Mastermind wikipedia page:
     https://en.wikipedia.org/wiki/Mastermind_(board_game)#Five-guess_algorithm
@@ -98,6 +98,16 @@ def main():
         guess = next_guess(possible_codes, guesses)
 
         # 7. Repeat from step 3
+
+
+def main():
+    while True:
+        game()
+
+        again = input("Play again? ")[0].lower()
+
+        if again == "n":
+            break
 
 
 if __name__ == "__main__":
