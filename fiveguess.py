@@ -53,6 +53,19 @@ class Mastermind():
         return self.win
 
 
+def feedback(code, guess):
+    """
+    Return a namedtuple Feedback(blacks, whites) where
+    blacks is the number of pegs from the guess that
+    are correct in both color and position and
+    whites is the number of pegs of the right color but wrong position.
+    """
+    blacks = sum(g == c for g, c in zip(guess, code))
+    whites = sum((Counter(guess) & Counter(code)).values()) - blacks
+
+    return Feedback(blacks, whites)
+
+
 def print_turn(guess, fb):
     """Print the guess and feedback of the turn."""
     blacks, whites = fb
@@ -66,9 +79,7 @@ def reduce_possible_codes(possible_codes, guess, fb):
     """Return a set with all elements from possible_codes that would receive
     the same feedback as the actual feedback from guess, fb,
     if guess was the secret code."""
-    test = Mastermind(guess)
-
-    return {code for code in possible_codes if test.feedback(code) == fb}
+    return {code for code in possible_codes if feedback(code, guess) == fb}
 
 
 def next_guess(possible_codes, past_guesses):
@@ -88,7 +99,7 @@ def next_guess(possible_codes, past_guesses):
     whenever possible.
     """
     def score(guess):
-        fbs = [Mastermind(code).feedback(guess) for code in possible_codes]
+        fbs = [feedback(code, guess) for code in possible_codes]
         return len(possible_codes) - max(Counter(fbs).values())
 
     ScoreData = namedtuple('ScoreData', ['score', 'is_possible_code', 'guess'])
