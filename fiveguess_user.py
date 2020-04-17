@@ -62,7 +62,7 @@ def next_guess(possible_codes, past_guesses):
         return len(possible_codes) - max(Counter(fbs).values())
 
     scores = [ScoreData(guess, score(guess), guess in possible_codes)
-              for guess in (init_possible_codes - past_guesses)]
+              for guess in sorted(init_possible_codes - past_guesses)]
 
     return max(scores, key=attrgetter('score', 'is_possible_code')).guess
 
@@ -104,9 +104,9 @@ def main():
     while True:
         game()
 
-        again = input("Play again? ")[0].lower()
+        again = input("Play again? ")
 
-        if again == "n":
+        if again[0].lower() == "n":
             break
 
 
