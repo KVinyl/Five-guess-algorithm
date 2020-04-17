@@ -1,11 +1,13 @@
 from collections import Counter, namedtuple
 from itertools import product
+from operator import attrgetter
 from random import randint
 
 
 init_possible_codes = set(product([1, 2, 3, 4, 5, 6], repeat=4))
 
 Feedback = namedtuple('Feedback', ['blacks', 'whites'])
+ScoreData = namedtuple('ScoreData', ['guess', 'score', 'is_possible_code'])
 
 
 class Mastermind():
@@ -102,11 +104,10 @@ def next_guess(possible_codes, past_guesses):
         fbs = [feedback(code, guess) for code in possible_codes]
         return len(possible_codes) - max(Counter(fbs).values())
 
-    ScoreData = namedtuple('ScoreData', ['score', 'is_possible_code', 'guess'])
-    scores = [ScoreData(score(guess), guess in possible_codes, guess)
+    scores = [ScoreData(guess, score(guess), guess in possible_codes)
               for guess in (init_possible_codes - past_guesses)]
 
-    return max(scores).guess
+    return max(scores, key=attrgetter('score', 'is_possible_code')).guess
 
 
 def main():
