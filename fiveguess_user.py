@@ -25,11 +25,23 @@ def feedback(code, guess):
 
 def turn(guess, turn_num):
     """Input feedback of the turn."""
+    def input_pegs(message):
+        while True:
+            try:
+                user_input = int(input(message))
+            except ValueError:
+                print("Enter an integer from 0 to 4 inclusively. Try again.")
+            else:
+                if user_input >= 0 and user_input <= 4:
+                    return user_input
+                else:
+                    print("Enter an integer from 0 to 4. Try again.")
+
     print()
     print("Turn", turn_num)
     print("Guess:", guess)
-    blacks = int(input("Blacks: "))
-    whites = int(input("Whites: "))
+    blacks = input_pegs("Blacks: ")
+    whites = input_pegs("Whites: ")
 
     return Feedback(blacks, whites)
 
